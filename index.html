@@ -7,13 +7,50 @@
 
   <body>
   
+    <div id="survey-app">
+        <h1>{{ primaryH1Msg }}</h1>
+        <div id="div_current_question" data-attribute-question-id:questionId>
+            {{ questionTitle }} ({{ questionDescription }})<br>
 
+            <input type="button" id="current_form_previous_question_button" data-attribute-question-number:  value="Previous Question"><!-- style="display:none" -->
+            <input type="button" id="current_form_next_question_button" value="Next Question" ><!-- style="display:none" -->
+            
+        </div>
+    </div>
 
     <!-- development build of vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
     <!-- sample survey questions from http://docs.fluidsurveys.com/fluidsurveys/api/json.html --> 
     <script type="text/javascript" src="data/survey1.json"></script>
-    
+    <script>
+
+        const mySurvey = data;
+        const totalQuestionNumber = mySurvey.response - 1; // offset 1 for difference in 
+        
+        let buildForm = [];
+        let currentQuestionNumber = 0;
+        buildForm.nextQuestionNumber = currentQuestionNumber + 1;
+        let currentQuestion = mySurvey.form[0].children[currentQuestionNumber];
+        buildForm.previousQuestionNumber = '';
+        if (buildForm.currentQuestionNumber != 0) {
+            buildForm.previousQuestionNumber = currentQuestionNumber - 1;
+        }
+
+        new Vue({
+            el: "#survey-app",
+            data() {
+                return {
+                    primaryH1Msg: mySurvey.title.en,
+                    questionId: currentQuestion.id,
+                    questionTitle: currentQuestion.title.en,
+                    questionDescription: currentQuestion.description.en,
+                    nextQuestionNumber: buildForm.nextQuestionNumber,
+                    previousQuestionNumber: buildForm.previousQuestionNumber
+                }
+            }
+        });
+
+    </script>
 
   </body>
 </html>
