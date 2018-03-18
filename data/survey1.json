@@ -18,6 +18,8 @@ data = {
           "title": {
             "en": "What is your name?"
           },
+          "placeHolder": "Max Mustermann",
+          "isRequired": true,
           "idname": "text-response",
           "children": [
             {
@@ -59,6 +61,42 @@ data = {
           "width": 100,
           "type": "question",
           "id": "dkKPosuDGy"
+        },
+        {
+          "description": {
+            "en": ""
+          },
+          "title": {
+            "en": "When do you want to retire?"
+          },
+          "idname": "single-choice",
+          "children": [
+            {
+              "type": "single",
+              "required": false,
+              "randomize": true,
+              "choices": [
+                {
+                  "label": {
+                    "en": "0-5 years"
+                  }
+                },
+                {
+                  "label": {
+                    "en": "5-10 years"
+                  }
+                },
+                {
+                  "label": {
+                    "en": "10+ years"
+                  }
+                }
+              ]
+            }
+          ],
+          "width": 100,
+          "type": "question",
+          "id": "klsdf982"
         }
       ]
     }
