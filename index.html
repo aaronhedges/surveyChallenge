@@ -32,19 +32,23 @@
         
         Vue.component('question-item', {
             props: ['question'],
-            template: `<div data-attribute-question-id:question.id>
+            template: `<div class="questionContainer" data-attribute-question-id:question.id>
             
-                <div id="div_current_question">
+                <div id:question.id>
                     
                     <span class="questionTitleSpan">{{ question.title.en }}</span> <span class="questionDescriptionSpan">{{ question.description.en }}</span><br><br>
 
-                    {{ question.idname }}
-
-                    
+                    <div v-if="question.idname=='text-response'">
+                        <input type="text" placeholder:question.placeholder>
+                    </div>
+                    <div v-if="question.idname=='single-choice'">
+                    SINGLE FOUND
+                        <span v-for="choice in question.choices">{{ choice.label.en }}</span>
+                    </div>
 
                 </div>
-            </div>
-            `
+            </div>`
+            
             /*
             <input type="button" id="current_form_previous_question_button" value="Previous Question" data-attribute-question-number:previousQuestionIndex><!-- style="display:none" -->
                     <input type="button" id="current_form_next_question_button" value="Next Question" data-attribute-question-number:nextQuestionIndex v-on:click="updateQuestion(nextQuestionIndex)"><!-- style="display:none" -->
@@ -79,9 +83,9 @@
                     buildForm.surveyCompletePercentage = currentQuestionIndex / totalQuestionNumber * 100;
                 },
             },*/
-            beforeMount(){
+            /*beforeMount(){
                 this.updateQuestion(defaultQuestionIndex)
-            }
+            }*/
 
         });
 
