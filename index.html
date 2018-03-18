@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <meta>
     <meta charset="UTF-8">
-    <title>Survey Challenge</title>
-  </meta>
+        <title>Survey Challenge</title>
+    </meta>
+    <head>
+        <link rel="stylesheet" type="text/css" href="resources/styles/survey.css">
+    </head>
 
   <body>
   
     <div id="survey-app">
         <h1>{{ primaryH1Msg }}</h1>
         <div id="div_current_question" data-attribute-question-id:questionId>
-            {{ questionTitle }} ({{ questionDescription }})<br>
+            Survey Completion Status: {{ surveyCompletePercentage }}%<br><br>
+
+            <span class="questionTitleSpan">{{ questionTitle }}</span><span class="questionDescriptionSpan">{{ questionDescription }}</span><br><br>
 
             <input type="button" id="current_form_previous_question_button" data-attribute-question-number:  value="Previous Question"><!-- style="display:none" -->
-            <input type="button" id="current_form_next_question_button" value="Next Question" ><!-- style="display:none" -->
+            <input type="button" id="current_form_next_question_button" value="Next Question" v-on:click="qIndex=nextQuestionIndex"><!-- style="display:none" -->
             
         </div>
     </div>
@@ -25,16 +29,23 @@
     <script>
 
         const mySurvey = data;
-        const totalQuestionNumber = mySurvey.response - 1; // offset 1 for difference in 
+        const totalQuestionNumber = mySurvey.form[0].children.length; 
         
         let buildForm = [];
-        let currentQuestionNumber = 0;
-        buildForm.nextQuestionNumber = currentQuestionNumber + 1;
-        let currentQuestion = mySurvey.form[0].children[currentQuestionNumber];
+        let currentQuestionIndex = 0;
+        let currentQuestionNumber = currentQuestionIndex + 1;
+        let currentQuestion = mySurvey.form[0].children[currentQuestionIndex];
+
+        // next/previous navigation logic
+        buildForm.nextQuestionIndex = currentQuestionIndex + 1;
         buildForm.previousQuestionNumber = '';
-        if (buildForm.currentQuestionNumber != 0) {
-            buildForm.previousQuestionNumber = currentQuestionNumber - 1;
+        if (buildForm.currentQuestionIndex != 0) {
+            buildForm.previousQuestionIndex = currentQuestionIndex - 1;
         }
+
+        // survey status logic
+        buildForm.surveyCompletePercentage = currentQuestionIndex / totalQuestionNumber * 100;
+        //buildForm.surveyCompletePercentage = parseFloat(buildForm.surveyCompletePercentage).toFixed(-2)+"%";
 
         new Vue({
             el: "#survey-app",
@@ -44,9 +55,12 @@
                     questionId: currentQuestion.id,
                     questionTitle: currentQuestion.title.en,
                     questionDescription: currentQuestion.description.en,
-                    nextQuestionNumber: buildForm.nextQuestionNumber,
-                    previousQuestionNumber: buildForm.previousQuestionNumber
+                    nextQuestionIndex: buildForm.nextQuestionIndex,
+                    previousQuestionIndex: buildForm.previousQuestionIndex,
+                    surveyCompletePercentage: buildForm.surveyCompletePercentage,
+                    qIndex: currentQuestionIndex
                 }
+                
             }
         });
 
