@@ -24,7 +24,7 @@ textarea {
   resize: none;
   outline: none;
   background-color: #f6f6f6;
-  font-size: 14px;
+  font-size: 1em;
   padding: 20px;
 }
 
@@ -33,11 +33,14 @@ textarea {
 }
 
 .questionTitleSpan {
-  font-size: 16px;
+  font-size: 2em;
 }
 
 .questionDescriptionSpan {
-  font-size: 12px;
+  font-size: 1em;
   color: #f66;
 }
 
+.hideClass {
+  display:none;
+}
