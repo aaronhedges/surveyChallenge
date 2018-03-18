@@ -10,16 +10,13 @@
   <body>
   
     <div id="survey-app">
-        <h1>{{ primaryH1Msg }}</h1>
-        <div id="div_current_question" data-attribute-question-id:questionId>
-            Survey Completion Status: {{ surveyCompletePercentage }}%<br><br>
-
-            <span class="questionTitleSpan">{{ questionTitle }}</span><span class="questionDescriptionSpan">{{ questionDescription }}</span><br><br>
-
-            <input type="button" id="current_form_previous_question_button" data-attribute-question-number:  value="Previous Question"><!-- style="display:none" -->
-            <input type="button" id="current_form_next_question_button" value="Next Question" v-on:click="qIndex=nextQuestionIndex"><!-- style="display:none" -->
-            
-        </div>
+        <h1>New Customer Survey</h1>
+        <question-item
+          v-for="item in questionArray"
+          v-bind:question="item"
+          v-bind:key="item.id">
+        </question-item>
+        
     </div>
 
     <!-- development build of vue.js -->
@@ -29,39 +26,63 @@
     <script>
 
         const mySurvey = data;
-        const totalQuestionNumber = mySurvey.form[0].children.length; 
+        const totalQuestionNumber = mySurvey.form[0].children.length;
+        const mySurveyQuestions = mySurvey.form[0].children;
+        const defaultQuestionIndex = '0';
         
-        let buildForm = [];
-        let currentQuestionIndex = 0;
-        let currentQuestionNumber = currentQuestionIndex + 1;
-        let currentQuestion = mySurvey.form[0].children[currentQuestionIndex];
+        Vue.component('question-item', {
+            props: ['question'],
+            template: `<div data-attribute-question-id:question.id>
+            
+                <div id="div_current_question">
+                    
+                    <span class="questionTitleSpan">{{ question.title.en }}</span> <span class="questionDescriptionSpan">{{ question.description.en }}</span><br><br>
 
-        // next/previous navigation logic
-        buildForm.nextQuestionIndex = currentQuestionIndex + 1;
-        buildForm.previousQuestionNumber = '';
-        if (buildForm.currentQuestionIndex != 0) {
-            buildForm.previousQuestionIndex = currentQuestionIndex - 1;
-        }
+                    {{ question.idname }}
 
-        // survey status logic
-        buildForm.surveyCompletePercentage = currentQuestionIndex / totalQuestionNumber * 100;
-        //buildForm.surveyCompletePercentage = parseFloat(buildForm.surveyCompletePercentage).toFixed(-2)+"%";
+                    
+
+                </div>
+            </div>
+            `
+            /*
+            <input type="button" id="current_form_previous_question_button" value="Previous Question" data-attribute-question-number:previousQuestionIndex><!-- style="display:none" -->
+                    <input type="button" id="current_form_next_question_button" value="Next Question" data-attribute-question-number:nextQuestionIndex v-on:click="updateQuestion(nextQuestionIndex)"><!-- style="display:none" -->
+            */
+            //Survey Completion: {{ surveyCompletePercentage }}%<br><br>
+        })
 
         new Vue({
             el: "#survey-app",
-            data() {
-                return {
-                    primaryH1Msg: mySurvey.title.en,
-                    questionId: currentQuestion.id,
-                    questionTitle: currentQuestion.title.en,
-                    questionDescription: currentQuestion.description.en,
-                    nextQuestionIndex: buildForm.nextQuestionIndex,
-                    previousQuestionIndex: buildForm.previousQuestionIndex,
-                    surveyCompletePercentage: buildForm.surveyCompletePercentage,
-                    qIndex: currentQuestionIndex
-                }
+            data: {
+                questionArray: 
+                    mySurveyQuestions
                 
             }
+
+            /*methods: {
+                updateQuestion: function (i) {
+                    let buildForm = [];
+                    let currentQuestionIndex = i;
+                    let currentQuestionNumber = i + 1;
+                    let currentQuestion = mySurvey.form[0].children[i];
+                    let currentQuestionType = mySurvey.form[0].children[i].idname;
+
+                    // next/previous navigation logic
+                    buildForm.nextQuestionIndex = i + 1;
+                    buildForm.previousQuestionNumber = '';
+                    if (buildForm.currentQuestionIndex != 0) {
+                        buildForm.previousQuestionIndex = currentQuestionIndex - 1;
+                    }
+
+                    // survey status logic
+                    buildForm.surveyCompletePercentage = currentQuestionIndex / totalQuestionNumber * 100;
+                },
+            },*/
+            beforeMount(){
+                this.updateQuestion(defaultQuestionIndex)
+            }
+
         });
 
     </script>
