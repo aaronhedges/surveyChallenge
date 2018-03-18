@@ -16,6 +16,13 @@
           v-bind:question="item"
           v-bind:key="item.id">
         </question-item>
+
+
+
+        <input type="button" id="current_form_previous_question_button" value="Previous" data-attribute-question-number:previousQuestionIndex>
+        <input type="button" id="current_form_next_question_button" value="Next" data-attribute-question-number:nextQuestionIndex v-on:click="updateQuestion(nextQuestionIndex)">
+
+        <!-- <input type="button" value="Start Survey" v-on:click="startSurvey"> -->
         
     </div>
 
@@ -29,31 +36,25 @@
         const totalQuestionNumber = mySurvey.form[0].children.length;
         const mySurveyQuestions = mySurvey.form[0].children;
         const defaultQuestionIndex = '0';
+        let surveyComplete = false;
+        let surveryStarted = false;
         
         Vue.component('question-item', {
             props: ['question'],
-            template: `<div class="questionContainer" data-attribute-question-id:question.id>
+            template: `<div class="questionContainer" id:question.id>
             
-                <div id:question.id>
-                    
                     <span class="questionTitleSpan">{{ question.title.en }}</span> <span class="questionDescriptionSpan">{{ question.description.en }}</span><br><br>
 
                     <div v-if="question.idname=='text-response'">
-                        <input type="text" placeholder:question.placeholder>
+                        <input type="text" size="64" placeholder:question.placeHolder>
                     </div>
                     <div v-if="question.idname=='single-choice'">
-                    SINGLE FOUND
-                        <span v-for="choice in question.choices">{{ choice.label.en }}</span>
+                    SINGLE FOUND 
+                        <span v-for="choice in question.choices">{{ choices.label.en }}</span>
                     </div>
-
-                </div>
             </div>`
+            // <h2>Survey Completion: {{ currentQuestionIndex / totalQuestionNumber * 100 }}%<br><br></h2>
             
-            /*
-            <input type="button" id="current_form_previous_question_button" value="Previous Question" data-attribute-question-number:previousQuestionIndex><!-- style="display:none" -->
-                    <input type="button" id="current_form_next_question_button" value="Next Question" data-attribute-question-number:nextQuestionIndex v-on:click="updateQuestion(nextQuestionIndex)"><!-- style="display:none" -->
-            */
-            //Survey Completion: {{ surveyCompletePercentage }}%<br><br>
         })
 
         new Vue({
@@ -62,6 +63,13 @@
                 questionArray: 
                     mySurveyQuestions
                 
+            },
+            methods: {
+                startSurvey: function () {
+                    let element = document.getElementById("TVU4V2XMPM");
+                    element.classList.remove("hideClass");
+                    surveyStarted = true;
+                }
             }
 
             /*methods: {
